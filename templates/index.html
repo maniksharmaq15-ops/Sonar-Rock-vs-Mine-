@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock vs Mine Prediction</title>
+</head>
+<body>
+
+    <h2>Rock vs Mine Prediction</h2>
+
+    <form action="/predict" method="post">
+        <p>Enter 60 values (comma separated):</p>
+        <input type="text" name="values" required style="width:400px;">
+        <br><br>
+        <button type="submit">Predict</button>
+    </form>
+
+    <h3>{{ prediction_text }}</h3>
+
+</body>
+</html>
