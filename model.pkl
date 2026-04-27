@@ -1,0 +1,4 @@
+import pickle
+
+# assuming your trained model variable is named 'model'
+pickle.dump(model, open("model.pkl", "wb"))
