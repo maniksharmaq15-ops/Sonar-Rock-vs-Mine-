@@ -12,12 +12,21 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    values = [float(x) for x in request.form.values()]
-    input_data = np.array(values).reshape(1, -1)
-    prediction = model.predict(input_data)
+    try:
+        values = request.form["values"]
+        input_data = [float(x.strip()) for x in values.split(",")]
 
-    result = "Mine" if prediction[0] == "M" else "Rock"
-    return render_template("index.html", prediction_text=f"Prediction: {result}")
+        if len(input_data) != 60:
+            return render_template("index.html", prediction_text="Please enter exactly 60 values.")
+
+        input_array = np.array(input_data).reshape(1, -1)
+        prediction = model.predict(input_array)
+
+        result = "Mine" if prediction[0] == "M" else "Rock"
+        return render_template("index.html", prediction_text=f"Prediction: {result}")
+
+    except Exception as e:
+        return render_template("index.html", prediction_text=f"Error: {str(e)}")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
