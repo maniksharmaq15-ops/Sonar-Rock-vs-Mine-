@@ -1,9 +1,21 @@
 from flask import Flask, render_template, request
-import joblib
 import numpy as np
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 app = Flask(__name__)
-model = joblib.load("model.pkl")
+
+# Train model on startup - no pkl file needed
+df = pd.read_csv("Sonar.csv", header=None)
+X = df.drop(columns=60, axis=1)
+Y = df[60]
+X_train, X_test, Y_train, Y_test = train_test_split(
+    X, Y, test_size=0.1, stratify=Y, random_state=1
+)
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, Y_train)
+print("Model trained successfully!")
 
 @app.route("/")
 def home():
