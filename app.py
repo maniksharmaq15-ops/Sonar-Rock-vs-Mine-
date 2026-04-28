@@ -1,21 +1,9 @@
 from flask import Flask, render_template, request
 import joblib
 import numpy as np
-import traceback
-import os
 
 app = Flask(__name__)
-
-# Load model with detailed error logging
-try:
-    print("Current directory:", os.getcwd())
-    print("Files present:", os.listdir("."))
-    model = joblib.load("model.pkl")
-    print("Model loaded successfully!")
-except Exception as e:
-    print("ERROR LOADING MODEL:")
-    traceback.print_exc()
-    model = None
+model = joblib.load("model.pkl")
 
 @app.route("/")
 def home():
@@ -23,8 +11,6 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    if model is None:
-        return render_template("index.html", prediction_text="Error: Model not loaded.")
     try:
         values = request.form["values"]
         input_data = [float(x.strip()) for x in values.split(",")]
